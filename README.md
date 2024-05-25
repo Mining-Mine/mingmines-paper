@@ -29,6 +29,29 @@ We plan to use Spark's machine learning library (MLlib) to train and ensemble mu
 
 
 
+## Develop Pipelines and Using Different Machine Learning Models for Predictions
+
+We use two sample datasets (radius 1km vs 5km) for machine model training. 
+
+### Step 1: Data Processing and Visualization
+
+
+![image](https://github.com/Huiyu1999/African-mining/assets/143468288/470b2835-17c6-46c4-8601-3e95c5460eef)
+
+
+
+### Step 2: Data Transformations and Feature Engineering
+
+
+
+
+
+
+### Step 3: Develop Pipelines and Employee Machine Learnig Models to Predict
+
+
+
+
 ## Team Roles 
 
 **Yu Hui**: Processing landsat data as well as related feature using AWS 
