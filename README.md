@@ -25,23 +25,28 @@ The primary focus of the project is on the Democratic Republic of Congo. The ana
 ### Visualizations
 
 3. **Waterways and Specific Point**
-   ![Waterways and Specific Point](https://github.com/Huiyu1999/African-mining/assets/143442308/e379494d-bd84-470b-b68c-5d29053f33d9)
+   ![image](https://github.com/Huiyu1999/African-mining/assets/143442308/226e69b8-1a58-480e-aa24-6b4da9120b3e)
+
    - **Description**: This map shows the distribution of waterways (in blue) in the DRC, with a specific point highlighted in red. It helps in analyzing the proximity of mining locations to water sources.
 
 4. **Protected Areas and Specific Point**
-   ![Protected Areas and Specific Point](https://github.com/Huiyu1999/African-mining/assets/143442308/c3530505-ff62-46ec-b4d4-fac4fc63ac95)
+   ![image](https://github.com/Huiyu1999/African-mining/assets/143442308/0b9a7219-57f0-416f-bda8-82cf2bb26819)
+
    - **Description**: This map displays the protected areas (in green) in the DRC, with a specific point marked in red. It is used to assess the potential impact of mining activities on protected regions.
 
 5. **Main Roads Distribution**
-   ![Main Roads Distribution](https://github.com/Huiyu1999/African-mining/assets/143442308/e9a8ff6a-12f5-4b05-be31-ed56e6b0aa84)
+   ![image](https://github.com/Huiyu1999/African-mining/assets/143442308/9ed26758-3b51-44a1-970c-0c6970cea74f)
+
    - **Description**: This map illustrates the distribution of main roads (in blue) in the DRC. Understanding the road network is crucial for analyzing the accessibility and potential transportation routes for mining activities.
 
 6. **Local Roads Distribution**
-   ![Local Roads Distribution](https://github.com/Huiyu1999/African-mining/assets/143442308/af043e7f-e379-4468-aa24-bf2d0aa31d8d)
+   ![image](https://github.com/Huiyu1999/African-mining/assets/143442308/127f9d50-8c60-427f-a2bd-a64305d29581)
+
    - **Description**: This map highlights the local roads (in blue) in the DRC. It provides insights into the local connectivity and infrastructure around mining sites.
 
 7. **Village Distribution**
-   ![Village Distribution](https://github.com/Huiyu1999/African-mining/assets/143442308/eb9563b8-0e42-4686-aa52-34b0307a8414)
+   ![image](https://github.com/Huiyu1999/African-mining/assets/143442308/373077eb-8a1e-4e65-b993-b21225405bb9)
+
    - **Description**: This map shows the distribution of villages (in blue) in the DRC, with a specific point marked in red. It is used to evaluate the impact of mining activities on local communities.
 
 ## Data Collection and Preprocessing
