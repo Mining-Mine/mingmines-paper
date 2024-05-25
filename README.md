@@ -69,16 +69,30 @@ We then moved on to using AWS and S3 buckets, allowing us to add NDVI values and
 
 The data preprocessing involves several steps, including loading CSV and GeoJSON files, converting dataframes to GeoDataFrames, reprojecting CRS for distance calculations, and buffering mine locations. The main analysis calculates the nearest distances from NDVI loss points to various geographic features and checks if NDVI loss points are within buffered mine locations.
 
-### Data Collection Code
+### Data Collection and Preprocessing Scripts
 
 Several scripts and notebooks were used for data collection and preprocessing, including:
+
 - **Central Africa Sensitivity Analysis**: [Central_Africa_sensitivity_analysis.ipynb](./Central_Africa_sensitivity_analysis.ipynb)
+  - **Description**: This notebook conducts sensitivity analysis on the Central African Republic to understand the spatial distribution of mining and NDVI loss locations.
+  
 - **AWS S3 Upload Script**: [s3_upload_script.py](./s3_upload_script.py)
+  - **Description**: This script uploads the collected data to AWS S3 buckets, enabling efficient storage and access for further analysis.
+  
 - **Congo Mine Feature Addition**: [congo_mine_add_feature.ipynb](./congo_mine_add_feature.ipynb)
+  - **Description**: This notebook adds features to the Congo mining data, including distances to various geographic features such as waterways, roads, protected areas, and villages.
+  
 - **Congo Visualization**: [Congo-visualization.ipynb](./Congo-visualization.ipynb)
+  - **Description**: This notebook generates visualizations for the Congo dataset, helping to illustrate the spatial relationships between mining locations and other features.
+  
 - **Add Feature 5k Radius**: [add_feature_5k_y1.py](./add_feature_5k_y1.py)
+  - **Description**: This script calculates the distance to various features for NDVI loss points within a 5000-meter radius of mining locations.
+  
 - **Add Feature 1k Radius**: [add_feature_y0.py](./add_feature_y0.py)
+  - **Description**: This script calculates the distance to various features for NDVI loss points within a 1000-meter radius of mining locations.
+  
 - **Match with Existing Mine**: [match_with_existing_mine.py](./match_with_existing_mine.py)
+  - **Description**: This script matches NDVI loss points with existing mine locations and labels them based on their proximity to the mines.
 
 ## Running the Analysis
 
@@ -87,7 +101,3 @@ The analysis is performed using MPI (Message Passing Interface) to parallelize t
 ## Conclusion
 
 This project provides a comprehensive spatial analysis of mining impacts on vegetation loss in the DRC. The visualizations and distance calculations offer valuable insights into the relationship between mining activities and various geographic features.
-
----
-
-Feel free to modify this README file as needed to better fit your project details and presentation style.
