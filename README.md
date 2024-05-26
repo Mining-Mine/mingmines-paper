@@ -30,24 +30,45 @@ We plan to use Spark's machine learning library (MLlib) to train and ensemble mu
 
 
 ## Develop Pipelines and Using Different Machine Learning Models for Predictions
+main jupyter notebook: []
 
-We use two sample datasets (radius 1km vs 5km) for machine model training. 
+We use two sample datasets (radius 1km vs 5km) for machine model training. We have three main steps: 
 
-### Step 1: Data Processing and Visualization
+Step 1: Data Processing and Visualization, Step 2: Data Transformations and Feature Engineering and
 
-
-![image](https://github.com/Huiyu1999/African-mining/assets/143468288/470b2835-17c6-46c4-8601-3e95c5460eef)
-
-
-
-### Step 2: Data Transformations and Feature Engineering
+Step 3: Develop Pipelines and Employee Machine Learnig Models to Predict. Our main results are following:
 
 
+We use three main models to train and predict data: logit model, random forest, and neutral network. Below are comparison performance of these three model:
+
+### Sample Data Using Radius 1km as Cutoff
+
+| Model               | Logit Model           | Random Forest        | Neural Network        |
+|---------------------|-----------------------|-----------------------|-----------------------|
+| **Test Accuracy**   | 0.817176979           | 0.873840681           | 0.873840681           |
+| **Confusion Matrix**| \[ [3348, 680],<br>   [759, 3084] \]  | \[ [3344, 684],<br>   [309, 3534] \] | \[ [2965, 1063],<br>   [546, 3297] \] |
+| **True Positive Rate** | 0.802498048        | 0.837837838           | 0.756192661           |
+| **True Negative Rate** | 0.831181728        | 0.91541199            | 0.844488875           |
 
 
+### Sample Data Using Radius 5km as Cutoff
+
+| Model               | Logit Model           | Random Forests        | Neural Network        |
+|---------------------|-----------------------|-----------------------|-----------------------|
+| **Test Accuracy**   | 0.773996431           | 0.873840681           | 0.873840681           |
+| **Confusion Matrix**| \[ [30073, 9902],<br>   [7703, 30219] \]  | \[ [3344, 684],<br>   [309, 3534] \] | \[ [28570, 11405],<br>   [4130, 33792] \] |
+| **True Positive Rate** | 0.796872528        | 0.837837838           | 0.747660243           |
+| **True Negative Rate** | 0.752295184        | 0.91541199            | 0.873700306           |
+
+### Conclusion
+
+- **Best Performing Model**: The Random Forests model outperforms the Logit Model and Neural Network in both accuracy and the ability to correctly identify mining and non-mining activities (highest true positive and true negative rates). This makes it the most reliable model for detecting potential mining activities.
+- **Impact of Radius Cutoff**: Increasing the radius cutoff from 1km to 5km generally decreases the performance of the Logit Model and Neural Network, while the Random Forests model maintains consistent performance. This suggests that the Random Forests model is more robust to changes in spatial scale.
+- **Model Recommendations**: For applications requiring high accuracy and reliability in detecting mining activities, the Random Forests model is recommended. The Logit Model, while simpler, performs adequately but not as well as the Random Forests model. The Neural Network shows potential but may require further tuning to handle larger spatial scales effectively.
+
+In summary, for both radius cutoffs, the Random Forests model demonstrates superior performance, making it the preferred choice for detecting potential mining activities in the given dataset.
 
 
-### Step 3: Develop Pipelines and Employee Machine Learnig Models to Predict
 
 
 
@@ -56,8 +77,10 @@ We use two sample datasets (radius 1km vs 5km) for machine model training.
 
 **Yu Hui**: Processing landsat data as well as related feature using AWS 
 
-**Charlotte**:  Data processinng and engineering a scalable data collection pipeline.
+**Kevin**: Feature generatig and visualization 
 
-**Kevin**: Responsible mainly for training the machine learning model, analyze the performance, and conducting respective visualization.
+
+**Charlotte**:  Responsible mainly for training the machine learning model, analyze the performance, and conducting respective visualization.
+
 
 
