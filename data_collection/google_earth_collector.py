@@ -4,8 +4,8 @@ import pandas as pd
 import time
 
 # ----------------------------------------------- Path Configurations --------------------------------------------------------------
-position_dataset = "/Users/peiranqin/Desktop/African-mining/image_dataset/sample_not_mine.xlsx"
-# position_dataset = None   # for demo
+# position_dataset = "/Users/peiranqin/Desktop/African-mining/image_dataset/sample_not_mine.xlsx"
+position_dataset = None   # for demo
 store_dir = "/Users/peiranqin/Desktop/African-mining/image_dataset/not_mine"
 
 
@@ -13,7 +13,8 @@ store_dir = "/Users/peiranqin/Desktop/African-mining/image_dataset/not_mine"
 # please configure these according to your computer
 search_bar_pos = (40, 72)
 image_save_icon_pos = (520, 70)
-OPERTION_INTERVAL = 0.2     # the time interval between each operation, to garuantee the previous operation is finished.
+OPERTION_INTERVAL = 0.01     # the time interval between each operation, to garuantee the previous operation is finished.
+
 
 
 
@@ -22,7 +23,7 @@ def open_google_earth():
         Open the google earth application. (You should download it first on your computer)
     '''
     os.system(r"open /Applications/Google\ Earth\ Pro.app")
-    time.sleep(3)   # wait until application is launched.
+    time.sleep(20)   # wait until application is launched.
     print("Google Earth Pro Opened.")
 
 
@@ -82,6 +83,11 @@ def collect_one_image(latitude, longitude):
 
 
 def main():
+
+    # check whether the store path valid
+    if not os.path.exists(store_dir):
+        print("Store Path not exist: {}".format(store_dir))
+        print("Please customize your store path")
 
     if position_dataset is not None:
         mine_not_mine_positions = pd.read_excel(position_dataset, engine='openpyxl')
