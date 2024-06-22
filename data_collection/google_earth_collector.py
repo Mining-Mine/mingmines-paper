@@ -4,18 +4,19 @@ import pandas as pd
 import time
 
 # ----------------------------------------------- Path Configurations --------------------------------------------------------------
-position_dataset = "/Users/peiranqin/Desktop/African-mining/image_dataset/sample_not_mine.xlsx"
+position_dataset = "/Users/peiranqin/Desktop/African-mining/image_dataset/sample_full_ghana_193_54_labeled.csv"
 # position_dataset = None
-store_dir = "/Users/peiranqin/Desktop/African-mining/image_dataset/not_mine"
+store_dir = "/Users/peiranqin/Desktop/African-mining/image_dataset"
 
 
 # --------------------------------------- Settings for automically collect images --------------------------------------------------
 # please configure these according to your computer
 search_bar_pos = (40, 72)
-image_save_icon_pos = (510, 70)
+image_save_icon_pos = (514, 70)
 pin_pos = (12, 162)
 OPERTION_INTERVAL = 0.01     # the time interval between each operation, to garuantee the previous operation is finished.
 
+target_label = "mine"
 
 Google_earth_opened = False
 
@@ -79,8 +80,13 @@ def collect_one_image(latitude, longitude):
         1. Seatch this location on Google Earth Pro.
         2. Download the iamge.
     '''
-    global Google_earth_opened
+    global Google_earth_opened, target_label
     file_name = "{}_{}.jpg".format(latitude, longitude)
+
+    if target_label == "mine":
+        store_dir = os.path.join(store_dir, "mine")
+    else:
+        store_dir = os.path.join(store_dir, "not_mine")
 
     image_store_path = os.path.join(store_dir, file_name)
 
@@ -102,8 +108,14 @@ def main():
         print("Please customize your store path")
 
     if position_dataset is not None:
-        mine_not_mine_positions = pd.read_excel(position_dataset, engine='openpyxl')
-        for _, row in mine_not_mine_positions.iterrows():
+        mine_positions = pd.read_csv(position_dataset)
+
+        if target_label == "mine":
+            mine_positions = mine_positions[mine_positions["Mining_Label"] == 1]
+        else:
+            mine_positions = mine_positions[mine_positions["Mining_Label"] == 0]
+
+        for _, row in mine_positions.iterrows():
             collect_one_image(row['Latitude'], row['Longitude'])
     else:
         sample_latitude = 48.8587611
