@@ -80,13 +80,8 @@ def collect_one_image(latitude, longitude):
         1. Seatch this location on Google Earth Pro.
         2. Download the iamge.
     '''
-    global Google_earth_opened, target_label
-    file_name = "{}_{}.jpg".format(latitude, longitude)
-
-    if target_label == "mine":
-        store_dir = os.path.join(store_dir, "mine")
-    else:
-        store_dir = os.path.join(store_dir, "not_mine")
+    global Google_earth_opened, target_label, store_dir
+    file_name = "{}_{}_{}.jpg".format(store_dir, latitude, longitude)
 
     image_store_path = os.path.join(store_dir, file_name)
 
@@ -110,13 +105,27 @@ def main():
     if position_dataset is not None:
         mine_positions = pd.read_csv(position_dataset)
 
+        chunk_size = len(mine_positions) // 8
+
+        # 分割DataFrame并分别保存为CSV
+        for i in range(8):
+            start = i * chunk_size
+            # 确保最后一份包含所有剩余的行
+            if i == 7:
+                end = len(mine_positions)
+            else:
+                end = start + chunk_size
+            # 保存每一份为CSV文件
+            chunk_df = mine_positions.iloc[start:end]
+            chunk_df.to_csv(f'sample_full_ghana_part{i+1}.csv', index=True)
+
         if target_label == "mine":
             mine_positions = mine_positions[mine_positions["Mining_Label"] == 1]
         else:
             mine_positions = mine_positions[mine_positions["Mining_Label"] == 0]
 
-        for _, row in mine_positions.iterrows():
-            collect_one_image(row['Latitude'], row['Longitude'])
+        # for _, row in mine_positions.iterrows():
+        #     collect_one_image(row['Latitude'], row['Longitude'])
     else:
         sample_latitude = 48.8587611
         sample_longitude = 2.2934333
