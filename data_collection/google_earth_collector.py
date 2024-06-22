@@ -4,17 +4,18 @@ import pandas as pd
 import time
 
 # ----------------------------------------------- Path Configurations --------------------------------------------------------------
-position_dataset = "/Users/peiranqin/Desktop/African-mining/image_dataset/sample_full_ghana_193_54_labeled.csv"
+position_dataset = "/Users/charlotte/Library/CloudStorage/GoogleDrive-jialez@uchicago.edu/共享云端硬盘/Mining Mines/mine_lable/sample_full_ghana_part1.csv"
 # position_dataset = None
-store_dir = "/Users/peiranqin/Desktop/African-mining/image_dataset"
+store_dir = "/Users/charlotte/Library/CloudStorage/GoogleDrive-jialez@uchicago.edu/共享云端硬盘/Mining Mines/Satelite Image"
 
 
 # --------------------------------------- Settings for automically collect images --------------------------------------------------
 # please configure these according to your computer
-search_bar_pos = (40, 72)
-image_save_icon_pos = (514, 70)
-pin_pos = (12, 162)
-OPERTION_INTERVAL = 0.01     # the time interval between each operation, to garuantee the previous operation is finished.
+search_bar_pos = (45, 45)
+image_save_icon_pos = (540, 45)
+pin_pos = (12, 120)
+
+OPERTION_INTERVAL = 0.02     # the time interval between each operation, to garuantee the previous operation is finished.
 
 target_label = "mine"
 
@@ -50,6 +51,7 @@ def search_coordinates(lat, lon):
     time.sleep(0.5)
 
     pyautogui.click(x=pin_pos[0], y=pin_pos[1])
+   
 
 
 def save_image(image_path):
@@ -59,7 +61,7 @@ def save_image(image_path):
     # save image
     pyautogui.click(x=image_save_icon_pos[0], y=image_save_icon_pos[1])   # click the save image icon
     print("Save Figure Icon Clicked. position: {}".format(pyautogui.position()))
-    time.sleep(1)
+    time.sleep(2)
 
     # enter the file name. 
     pyautogui.write(image_path, interval=OPERTION_INTERVAL)
@@ -71,7 +73,7 @@ def save_image(image_path):
     pyautogui.press("enter") 
     time.sleep(0.5)
     pyautogui.press("enter") 
-    time.sleep(3)   # make sure the image has been saved.
+    time.sleep(2)   # make sure the image has been saved.
     print("Image Saved: {}".format(image_path))
 
 def collect_one_image(latitude, longitude):
@@ -80,13 +82,10 @@ def collect_one_image(latitude, longitude):
         1. Seatch this location on Google Earth Pro.
         2. Download the iamge.
     '''
-    global Google_earth_opened, target_label
-    file_name = "{}_{}.jpg".format(latitude, longitude)
 
-    if target_label == "mine":
-        store_dir = os.path.join(store_dir, "mine")
-    else:
-        store_dir = os.path.join(store_dir, "not_mine")
+    global Google_earth_opened, target_label, store_dir
+
+    file_name = "{}_{}_{}.jpg".format(target_label,latitude, longitude)
 
     image_store_path = os.path.join(store_dir, file_name)
 
