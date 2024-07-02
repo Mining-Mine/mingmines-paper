@@ -2,3 +2,9 @@
 image_dataset/not_mine/*
 image_dataset/mine/*
 image_dataset/sample*
+image_dataset/mine_dataset_*/*
+image_dataset/not_mine/*
+image_dataset/raw_mine_dataset*/*
+image_dataset/raw_not_mine_dataset*/*
+image_dataset/raw_mine_dataset.zip
+image_dataset/labeled_mine_dataset/*
