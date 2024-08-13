@@ -3,8 +3,8 @@
 #### 1. Overview  
 + In addition to inferring mining activities by analyzing tabular data, we are also curious about whether the image data can be useful for making more accurate decisions. With this motivation, we plan to apply **Computer Vision** to the mining inference process.  
 + Here are the steps:  
-1. Raw Image Data Collection from [Google Earth Pro](https://earth.google.com/web).  **On Going⏳**  
-2. Data Processing & Data Analysis.  **TODO⛳️**  
+1. Raw Image Data Collection from [Google Earth Pro](https://earth.google.com/web).  **Done✅**  
+2. Data Labeling  **Done✅***  
 3. Model Exploration.  **TODO⛳️**  
 4. Fine Tuning.  **TODO⛳️**  
 5. Evaluation.  **TODO⛳️**    
@@ -24,4 +24,21 @@
   python3 google_earth_collector.py
   ```
 
-+ The collected image will be stored in [./image_dataset](./image_dataset)
++ The collected images are stored in [./raw_image_dataset](https://drive.google.com/drive/folders/1brilaUXeCxpNdUa3mDqOWD7ymUnd3M3q)  
+---
+
+#### 3. Data Labeling  
+  
++ Code Base: [./labeling_website](https://github.com/QinPR/Mining_Website)  
+  
++ The labeled images dataset are stored [here](https://drive.google.com/drive/folders/1iUSdqqA9NaACCcjkW1Bhvv48YYSnHwoa)  
+---
+  
+#### 4. Model Exploration  
+  
++ Code Baseline: [./model](./model)  
+
++ We are exploring the fowlloing models:  
+  1. CNN  
+
+
