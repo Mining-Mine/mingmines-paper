@@ -8,3 +8,5 @@ image_dataset/raw_mine_dataset*/*
 image_dataset/raw_not_mine_dataset*/*
 image_dataset/raw_mine_dataset.zip
 image_dataset/labeled_mine_dataset/*
+
+classification/__pycache__

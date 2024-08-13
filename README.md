@@ -4,7 +4,7 @@
 + In addition to inferring mining activities by analyzing tabular data, we are also curious about whether the image data can be useful for making more accurate decisions. With this motivation, we plan to apply **Computer Vision** to the mining inference process.  
 + Here are the steps:  
 1. Raw Image Data Collection from [Google Earth Pro](https://earth.google.com/web).  **Done✅**  
-2. Data Labeling  **Done✅***  
+2. Data Labeling  **Done✅**
 3. Model Exploration.  **TODO⛳️**  
 4. Fine Tuning.  **TODO⛳️**  
 5. Evaluation.  **TODO⛳️**    
@@ -29,7 +29,7 @@
 
 #### 3. Data Labeling  
   
-+ Code Base: [./labeling_website](https://github.com/QinPR/Mining_Website)  
++ Code Base: [labeling_website](https://github.com/QinPR/Mining_Website)  
   
 + The labeled images dataset are stored [here](https://drive.google.com/drive/folders/1iUSdqqA9NaACCcjkW1Bhvv48YYSnHwoa)  
 ---
