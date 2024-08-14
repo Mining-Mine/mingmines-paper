@@ -8,15 +8,21 @@ import numpy as np
 
 import config as conf
 
+tf.random.set_seed(42)
+
 def load_image_from_path(path):
     image = tf.io.read_file(path)
     try:
-        image = tf.image.decode_jpeg(image, channels=3)
+        image = tf.image.decode_jpeg(image, channels=conf.INPUT_SHAPE[2]) # num of channels
     except tf.errors.InvalidArgumentError:
         print("Error decoding image: {}".format(path))
         exit()
         return None, None
     image = tf.image.convert_image_dtype(image, tf.float32)
+    
+    # Resize the image to the target size
+    image = tf.image.resize(image, (conf.INPUT_SHAPE[0], conf.INPUT_SHAPE[1]))
+    
     return image
 
 def filter_valid_images(image, label):
@@ -36,6 +42,7 @@ def load_dataset():
 
         mine_dataset = tf.data.Dataset.list_files(mine_file_pattern)
         mine_dataset = mine_dataset.map(lambda x: (load_image_from_path(x), conf.LABEL.MINE))
+        mine_dataset_n_samples = tf.data.experimental.cardinality(mine_dataset).numpy()
 
         # 2. read the images with label = "not_mine"
         not_mine_dir = os.path.join(labler_dir, "not_mine")
@@ -43,21 +50,14 @@ def load_dataset():
 
         not_mine_dataset = tf.data.Dataset.list_files(not_mine_file_pattern) 
         not_mine_dataset = not_mine_dataset.map(lambda x: (load_image_from_path(x), conf.LABEL.NOT_MINE))
+        not_mine_dataset_n_samples = tf.data.experimental.cardinality(not_mine_dataset).numpy()
 
-        # 3. [Option] read the images with label = "not_sure"
-        if conf.INCLUDE_NOT_SURE:
-            not_sure_dir = os.path.join(labler_dir, "not_sure")
-            not_sure_file_pattern = os.path.join(not_sure_dir, "*.jpg")
+        # balance the dataset
+        min_n_sample = min([mine_dataset_n_samples, not_mine_dataset_n_samples])
+        mine_dataset = mine_dataset.take(min_n_sample)
+        not_mine_dataset = not_mine_dataset.take(min_n_sample)
 
-            not_sure_dataset = tf.data.Dataset.list_files(not_sure_file_pattern)
-            not_sure_dataset = not_sure_dataset.map(lambda x: (load_image_from_path(x), conf.LABEL.NOT_SURE))
-
-            # Concatenate all datasets
-            combined_dataset = mine_dataset.concatenate(not_mine_dataset).concatenate(not_sure_dataset)
-        else:
-            # Concatenate mine and not_mine datasets
-            combined_dataset = mine_dataset.concatenate(not_mine_dataset)
-
+        combined_dataset = mine_dataset.concatenate(not_mine_dataset)
         # Initialize or concatenate with full_dataset
         if full_dataset is None:
             full_dataset = combined_dataset
@@ -69,6 +69,10 @@ def load_dataset():
 
     # 4. shuffle the dataset
     full_dataset = full_dataset.shuffle(buffer_size=2000)
+
+    # 5. batch the dataset (add batch size handling)
+    batch_size = conf.BATCH_SIZE if hasattr(conf, 'BATCH_SIZE') else 32
+    full_dataset = full_dataset.batch(batch_size)
 
     return full_dataset
 
@@ -88,7 +92,8 @@ def dataset_summary(dataset, num_samples=5):
 
     label_counts = Counter()
     for _, label in dataset:
-        label_counts[label.numpy()] += 1
+        # Convert label to a hashable type
+        label_counts[label.numpy().item()] += 1
 
     print("\nDataset Summary:")
     print(f"Total number of samples: {total_samples}")
@@ -97,3 +102,15 @@ def dataset_summary(dataset, num_samples=5):
     print(f"Unique shapes: {set(element_shapes)}")
     print(f"Sample labels: {labels}")
     print(f"Element spec: {dataset.element_spec}")
+
+
+def split_dataset(full_dataset, train_size=0.7):
+    dataset_size = full_dataset.cardinality().numpy()
+    
+    train_size = int(train_size * dataset_size)
+    test_size = dataset_size - train_size
+    
+    train_dataset = full_dataset.take(train_size)
+    test_dataset = full_dataset.skip(train_size)
+    
+    return train_dataset, test_dataset
