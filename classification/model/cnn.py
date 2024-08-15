@@ -18,15 +18,12 @@ class CNN:
         model = models.Sequential()
 
         # Input layer with data augmentation (moved here for illustration, but can be done separately)
-        data_augmentation = models.Sequential([
-            layers.RandomFlip("horizontal"),
-            layers.RandomRotation(0.1),
-            layers.RandomZoom(0.1)
-        ])
-        model.add(data_augmentation)
+        model.add(layers.RandomFlip("horizontal", input_shape=conf.INPUT_SHAPE))
+        model.add(layers.RandomRotation(0.1))
+        model.add(layers.RandomZoom(0.1))
 
         # Layer 1
-        model.add(layers.Conv2D(16, (3, 3), activation='relu', input_shape=conf.INPUT_SHAPE))
+        model.add(layers.Conv2D(16, (3, 3), activation='relu'))
         model.add(layers.BatchNormalization())
         model.add(layers.MaxPooling2D((2, 2)))
 
@@ -44,7 +41,7 @@ class CNN:
         model.add(layers.Flatten())
         model.add(layers.Dropout(0.5))
         model.add(layers.Dense(64, activation='relu'))
-        model.add(layers.BatchNormalization())  # Optional: Add BatchNormalization here
+        model.add(layers.BatchNormalization())
 
         # Output layer
         if self.num_classes == 2:
@@ -104,22 +101,40 @@ class CNN:
         plt.ylabel("Actual")
         plt.savefig("./CNN_confusion_matrix")
 
-    def plot_samples(self, test_data, y_true, y_pred):
+    def plot_samples(self, test_data):
         TP_images = []
         TN_images = []
         FP_images = []
         FN_images = []
 
+        full = 0
         # Classify the images based on the predictions
-        for i in range(len(y_true)):
-            if y_true[i] == 1 and y_pred[i] == 1:
-                TP_images.append(test_data[i][0])  # Append TP images
-            elif y_true[i] == 0 and y_pred[i] == 0:
-                TN_images.append(test_data[i][0])  # Append TN images
-            elif y_true[i] == 0 and y_pred[i] == 1:
-                FP_images.append(test_data[i][0])  # Append FP images
-            elif y_true[i] == 1 and y_pred[i] == 0:
-                FN_images.append(test_data[i][0])  # Append FN images
+        for i, (image, label) in enumerate(test_data):
+            prediction = np.round(self.predict(image).flatten())
+            print("label, prediction: {}, {}".format(label, prediction))
+
+            if label == 1 and prediction == 1:
+                if len(TP_images) < 9:
+                    TP_images.append(image)  # Append TP images
+                    if len(TP_images) >= 9:
+                        full += 1
+            elif label == 0 and prediction == 0:
+                if len(TN_images) < 9:
+                    TN_images.append(image)  # Append TN images
+                    if len(TN_images) >= 9:
+                        full += 1
+            elif label == 0 and prediction == 1:
+                if len(FP_images) < 9:
+                    FP_images.append(image)  # Append FP images
+                    if len(FP_images) >= 9:
+                        full += 1
+            elif label == 1 and prediction == 0:
+                if len(FN_images) < 9:
+                    FN_images.append(image)  # Append FN images
+                    if len(FN_images) >= 9:
+                        full += 1
+            if full >= 4:
+                break
 
         # Plot a random sample from each category
         self.plot_image_sample(TP_images, "TP_samples")
@@ -127,38 +142,47 @@ class CNN:
         self.plot_image_sample(FP_images, "FP_samples")
         self.plot_image_sample(FN_images, "FN_samples")
 
+    def plot_first_9_positive_images(self, test_data):
+        images = []
+        for image, label in test_data:
+            if len(images) >= 9: 
+                break
+            if label == 1:
+                images.append(image)
+        self.plot_image_sample(images, "first_9_pos")
+
+
     def plot_image_sample(self, images, title):
         plt.figure(figsize=(10, 10))
         for i in range(min(9, len(images))):  # Show up to 9 images
             plt.subplot(3, 3, i + 1)
-            plt.imshow(images[i])
+            plt.imshow(images[i][0])
             plt.axis('off')
         plt.suptitle(title)
         plt.savefig(title)
         print("plot samples: {}".format(title))
 
-    def extract_images_and_labels(self, dataset):
-        images = []
-        labels = []
-        for image, label in dataset:
-            images.append(image.numpy())
-            labels.append(label.numpy())
-        return np.array(images), np.array(labels)
+    def extract_labels(self, dataset):
+        labels = [label.numpy() for _, label in dataset]
+        return np.array(labels)
 
     def evaluate_and_plot(self, test_data):
-        images, y_true = self.extract_images_and_labels(test_data)
-        y_pred = self.predict(test_data)
+        self.plot_first_9_positive_images(test_data)
+        y_true, y_pred = [], []
 
-        print("num of classes = {}".format(self.num_classes))
-        if self.num_classes == 2:
-            y_pred = np.round(y_pred).flatten()
+        for image, label in test_data:
+            y_true.append(label.numpy())
+            y_pred.append(self.predict(image).flatten())
+
+        y_true = np.array(y_true)
+        y_pred = np.round(np.array(y_pred))
 
         print("Unique values in y_true:", np.unique(y_true))
         print("Unique values in y_pred:", np.unique(y_pred))
         
         cm = self.evaluate_model(y_true, y_pred)
         self.plot_confusion_matrix(cm)
-        self.plot_samples(images, y_true, y_pred)
+        self.plot_samples(test_data)
 
     def predict(self, input_data):
         predictions = self.model.predict(input_data, batch_size=conf.BATCH_SIZE)

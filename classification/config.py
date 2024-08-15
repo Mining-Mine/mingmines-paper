@@ -10,6 +10,6 @@ INCLUDE_NOT_SURE = False  # whether include not sure into the classification
 MODEL = "CNN"
 
 BATCH_SIZE = 1
-TRAIN_EPOCH = 1
+TRAIN_EPOCH = 5
 
 INPUT_SHAPE = (1734, 2422, 3)

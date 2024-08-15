@@ -49,8 +49,8 @@ def load_dataset():
 
     # balance the dataset
     min_n_sample = min([mine_dataset_n_samples, not_mine_dataset_n_samples])
-    mine_dataset = mine_dataset.take(100)   # TODO: change this back
-    not_mine_dataset = not_mine_dataset.take(100)
+    mine_dataset = mine_dataset.take(min_n_sample)
+    not_mine_dataset = not_mine_dataset.take(min_n_sample)
 
     combined_dataset = mine_dataset.concatenate(not_mine_dataset)
     # Initialize or concatenate with full_dataset
@@ -63,7 +63,7 @@ def load_dataset():
         raise ValueError("No datasets were loaded. Please check the dataset path.")
 
     # 4. shuffle the dataset
-    full_dataset = full_dataset.shuffle(buffer_size=2000)
+    full_dataset = full_dataset.shuffle(buffer_size=1000)
 
     # 5. batch the dataset (add batch size handling)
     batch_size = conf.BATCH_SIZE if hasattr(conf, 'BATCH_SIZE') else 32
