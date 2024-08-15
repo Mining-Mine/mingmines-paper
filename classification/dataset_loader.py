@@ -31,41 +31,36 @@ def filter_valid_images(image, label):
 def load_dataset():
     full_dataset = None
 
-    # load the dataset from each labler
-    for labler in conf.LABLERS:
-        print("load images from: {}".format(labler))
-        labler_dir = os.path.join(conf.LABELED_DATASET_PATH, labler)
+    # 1. read the images with label = "mine"
+    mine_dir = os.path.join(conf.LABELED_DATASET_PATH, "mine")
+    mine_file_pattern = os.path.join(mine_dir, "*.jpg")
 
-        # 1. read the images with label = "mine"
-        mine_dir = os.path.join(labler_dir, "mine")
-        mine_file_pattern = os.path.join(mine_dir, "*.jpg")
+    mine_dataset = tf.data.Dataset.list_files(mine_file_pattern)
+    mine_dataset = mine_dataset.map(lambda x: (load_image_from_path(x), conf.LABEL.MINE))
+    mine_dataset_n_samples = tf.data.experimental.cardinality(mine_dataset).numpy()
 
-        mine_dataset = tf.data.Dataset.list_files(mine_file_pattern)
-        mine_dataset = mine_dataset.map(lambda x: (load_image_from_path(x), conf.LABEL.MINE))
-        mine_dataset_n_samples = tf.data.experimental.cardinality(mine_dataset).numpy()
+    # 2. read the images with label = "not_mine"
+    not_mine_dir = os.path.join(conf.LABELED_DATASET_PATH, "not_mine")
+    not_mine_file_pattern = os.path.join(not_mine_dir, "*.jpg")
 
-        # 2. read the images with label = "not_mine"
-        not_mine_dir = os.path.join(labler_dir, "not_mine")
-        not_mine_file_pattern = os.path.join(not_mine_dir, "*.jpg")
+    not_mine_dataset = tf.data.Dataset.list_files(not_mine_file_pattern) 
+    not_mine_dataset = not_mine_dataset.map(lambda x: (load_image_from_path(x), conf.LABEL.NOT_MINE))
+    not_mine_dataset_n_samples = tf.data.experimental.cardinality(not_mine_dataset).numpy()
 
-        not_mine_dataset = tf.data.Dataset.list_files(not_mine_file_pattern) 
-        not_mine_dataset = not_mine_dataset.map(lambda x: (load_image_from_path(x), conf.LABEL.NOT_MINE))
-        not_mine_dataset_n_samples = tf.data.experimental.cardinality(not_mine_dataset).numpy()
+    # balance the dataset
+    min_n_sample = min([mine_dataset_n_samples, not_mine_dataset_n_samples])
+    mine_dataset = mine_dataset.take(100)   # TODO: change this back
+    not_mine_dataset = not_mine_dataset.take(100)
 
-        # balance the dataset
-        min_n_sample = min([mine_dataset_n_samples, not_mine_dataset_n_samples])
-        mine_dataset = mine_dataset.take(min_n_sample)
-        not_mine_dataset = not_mine_dataset.take(min_n_sample)
-
-        combined_dataset = mine_dataset.concatenate(not_mine_dataset)
-        # Initialize or concatenate with full_dataset
-        if full_dataset is None:
-            full_dataset = combined_dataset
-        else:
-            full_dataset = full_dataset.concatenate(combined_dataset)
+    combined_dataset = mine_dataset.concatenate(not_mine_dataset)
+    # Initialize or concatenate with full_dataset
+    if full_dataset is None:
+        full_dataset = combined_dataset
+    else:
+        full_dataset = full_dataset.concatenate(combined_dataset)
 
     if full_dataset is None:
-        raise ValueError("No datasets were loaded. Please check LABLERS and paths.")
+        raise ValueError("No datasets were loaded. Please check the dataset path.")
 
     # 4. shuffle the dataset
     full_dataset = full_dataset.shuffle(buffer_size=2000)
@@ -92,8 +87,8 @@ def dataset_summary(dataset, num_samples=5):
 
     label_counts = Counter()
     for _, label in dataset:
-        # Convert label to a hashable type
-        label_counts[label.numpy().item()] += 1
+        for l in label.numpy():
+            label_counts[l.item()] += 1
 
     print("\nDataset Summary:")
     print(f"Total number of samples: {total_samples}")

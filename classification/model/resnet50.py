@@ -1,6 +1,8 @@
 import os
+
 import tensorflow as tf
 from tensorflow.keras import layers, models
+from tensorflow.keras.applications import ResNet50
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -8,43 +10,32 @@ import numpy as np
 
 import config as conf
 
-class CNN:
+class ResNet50:
     def __init__(self, num_classes):
         self.num_classes = num_classes
         self.model = self._build_model()
-        print("CNN finish initialization")
+        print("ResNet50 finish initialization")
 
     def _build_model(self):
+        base_model = ResNet50(weights='imagenet', include_top=False, input_shape=conf.INPUT_SHAPE)
+
+        # frozon the resnet50 layers
+        base_model.trainable = False
+
         model = models.Sequential()
+        model.add(base_model)
 
-        # Input layer with data augmentation (moved here for illustration, but can be done separately)
-        data_augmentation = models.Sequential([
-            layers.RandomFlip("horizontal"),
-            layers.RandomRotation(0.1),
-            layers.RandomZoom(0.1)
-        ])
-        model.add(data_augmentation)
+        # Data augmentation layer
+        model.add(layers.experimental.preprocessing.RandomFlip("horizontal"))
+        model.add(layers.experimental.preprocessing.RandomRotation(0.1))
+        model.add(layers.experimental.preprocessing.RandomZoom(0.1))
 
-        # Layer 1
-        model.add(layers.Conv2D(16, (3, 3), activation='relu', input_shape=conf.INPUT_SHAPE))
-        model.add(layers.BatchNormalization())
-        model.add(layers.MaxPooling2D((2, 2)))
-
-        # Layer 2
-        model.add(layers.Conv2D(32, (3, 3), activation='relu'))
-        model.add(layers.BatchNormalization())
-        model.add(layers.MaxPooling2D((2, 2)))
-
-        # Layer 3
-        model.add(layers.Conv2D(64, (3, 3), activation='relu'))
-        model.add(layers.BatchNormalization())
-        model.add(layers.MaxPooling2D((2, 2)))
-
-        # Flatten and Dense layers
-        model.add(layers.Flatten())
+        # Global Average Pooling layer (instead of Flatten layer)
+        model.add(layers.GlobalAveragePooling2D())
         model.add(layers.Dropout(0.5))
+
+        # Fully connected layer
         model.add(layers.Dense(64, activation='relu'))
-        model.add(layers.BatchNormalization())  # Optional: Add BatchNormalization here
 
         # Output layer
         if self.num_classes == 2:
@@ -59,7 +50,8 @@ class CNN:
                       loss=loss,
                       metrics=['accuracy', 'AUC'])
 
-        model.summary()  # Optionally keep or remove this in production
+        print(model.summary())
+
         return model
 
     def train(self, train_data, validation_data=None, batch_size=conf.BATCH_SIZE):
@@ -151,13 +143,17 @@ class CNN:
 
         print("num of classes = {}".format(self.num_classes))
         if self.num_classes == 2:
-            y_pred = np.round(y_pred).flatten()
+            y_pred = np.round(y_pred).flatten()  # Round off for binary classification
 
+        # Evaluate the model and print results
         print("Unique values in y_true:", np.unique(y_true))
         print("Unique values in y_pred:", np.unique(y_pred))
-        
         cm = self.evaluate_model(y_true, y_pred)
+
+        # Plot the confusion matrix
         self.plot_confusion_matrix(cm)
+
+        # Plot sample images for TP, TN, FP, FN
         self.plot_samples(images, y_true, y_pred)
 
     def predict(self, input_data):

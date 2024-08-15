@@ -19,12 +19,6 @@ if __name__ == '__main__':
     # split the training/testing sets
     train_dataset, test_dataset = dataset_loader.split_dataset(full_dataset)
 
-    for batch in train_dataset.take(10):
-        images, labels = batch
-        print("Images shape:", images.shape)
-        print("Labels shape:", labels.shape)
-        print("Labels:", labels[:10].numpy())
-
     # init the model
     clf = None
     num_classes = 2
