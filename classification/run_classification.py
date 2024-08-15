@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
     # load the dataset
     full_dataset = dataset_loader.load_dataset()
-    dataset_loader.dataset_summary(full_dataset)
+    print("finish loading full dataset")
 
     # split the training/testing sets
     train_dataset, test_dataset = dataset_loader.split_dataset(full_dataset)

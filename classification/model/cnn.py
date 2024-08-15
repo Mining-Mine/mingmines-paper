@@ -52,7 +52,7 @@ class CNN:
             loss = 'categorical_crossentropy'
 
         # Compile the model
-        model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+        model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.01),
                       loss=loss,
                       metrics=['accuracy', 'AUC'])
 
@@ -142,15 +142,6 @@ class CNN:
         self.plot_image_sample(FP_images, "FP_samples")
         self.plot_image_sample(FN_images, "FN_samples")
 
-    def plot_first_9_positive_images(self, test_data):
-        images = []
-        for image, label in test_data:
-            if len(images) >= 9: 
-                break
-            if label == 1:
-                images.append(image)
-        self.plot_image_sample(images, "first_9_pos")
-
 
     def plot_image_sample(self, images, title):
         plt.figure(figsize=(10, 10))
@@ -167,7 +158,6 @@ class CNN:
         return np.array(labels)
 
     def evaluate_and_plot(self, test_data):
-        self.plot_first_9_positive_images(test_data)
         y_true, y_pred = [], []
 
         for image, label in test_data:
