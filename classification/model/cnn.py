@@ -5,8 +5,13 @@ from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, r
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+import pickle
+from datetime import datetime
 
 import config as conf
+
+tf.random.set_seed(42)
+
 
 class CNN:
     def __init__(self, num_classes):
@@ -23,25 +28,21 @@ class CNN:
         model.add(layers.RandomZoom(0.1))
 
         # Layer 1
-        model.add(layers.Conv2D(16, (3, 3), activation='relu'))
-        model.add(layers.BatchNormalization())
+        model.add(layers.Conv2D(16, (3, 3), activation='relu', input_shape=conf.INPUT_SHAPE))
         model.add(layers.MaxPooling2D((2, 2)))
 
         # Layer 2
         model.add(layers.Conv2D(32, (3, 3), activation='relu'))
-        model.add(layers.BatchNormalization())
         model.add(layers.MaxPooling2D((2, 2)))
 
         # Layer 3
         model.add(layers.Conv2D(64, (3, 3), activation='relu'))
-        model.add(layers.BatchNormalization())
         model.add(layers.MaxPooling2D((2, 2)))
 
         # Flatten and Dense layers
         model.add(layers.Flatten())
-        model.add(layers.Dropout(0.5))
+        # model.add(layers.Dropout(0.5))
         model.add(layers.Dense(64, activation='relu'))
-        model.add(layers.BatchNormalization())
 
         # Output layer
         if self.num_classes == 2:
@@ -52,12 +53,20 @@ class CNN:
             loss = 'categorical_crossentropy'
 
         # Compile the model
-        model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.01),
+        model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
                       loss=loss,
                       metrics=['accuracy', 'AUC'])
 
         model.summary()  # Optionally keep or remove this in production
         return model
+
+    def load_model(self):
+        try:
+            self.model.load_weights("./result/cnn/cnn.weights.h5")
+            print("loaded model: ./result/cnn/cnn.weights.h5")
+        except:
+            print("Error loading model: ./result/cnn/cnn.weights.h5")
+            exit()
 
     def train(self, train_data, validation_data=None, batch_size=conf.BATCH_SIZE):
         history = self.model.fit(
@@ -66,12 +75,19 @@ class CNN:
             epochs=conf.TRAIN_EPOCH,
             batch_size=batch_size
         )
+
+        # save the training history
+        with open("./result/cnn/train_history.pkl", "wb") as file:
+            pickle.dump(history.history, file)
+
+        # save the resulting model
+        self.model.save_weights("./result/cnn/cnn.weights.h5")
+
         return history
 
     def evaluate_model(self, y_true, y_pred):
         # Calculate the confusion matrix
         cm = confusion_matrix(y_true, np.round(y_pred))
-        print("Confusion matrix shape:", cm.shape)
         TP, FP, FN, TN = cm.ravel()
 
         # Calculate various metrics
@@ -99,7 +115,7 @@ class CNN:
         plt.title("Confusion Matrix")
         plt.xlabel("Predicted")
         plt.ylabel("Actual")
-        plt.savefig("./CNN_confusion_matrix")
+        plt.savefig("./result/cnn/CNN_confusion_matrix")
 
     def plot_samples(self, test_data):
         TP_images = []
@@ -111,7 +127,6 @@ class CNN:
         # Classify the images based on the predictions
         for i, (image, label) in enumerate(test_data):
             prediction = np.round(self.predict(image).flatten())
-            print("label, prediction: {}, {}".format(label, prediction))
 
             if label == 1 and prediction == 1:
                 if len(TP_images) < 9:
@@ -137,10 +152,10 @@ class CNN:
                 break
 
         # Plot a random sample from each category
-        self.plot_image_sample(TP_images, "TP_samples")
-        self.plot_image_sample(TN_images, "TN_samples")
-        self.plot_image_sample(FP_images, "FP_samples")
-        self.plot_image_sample(FN_images, "FN_samples")
+        self.plot_image_sample(TP_images, "./result/cnn/TP_samples")
+        self.plot_image_sample(TN_images, "./result/cnn/TN_samples")
+        self.plot_image_sample(FP_images, "./result/cnn/FP_samples")
+        self.plot_image_sample(FN_images, "./result/cnn/FN_samples")
 
 
     def plot_image_sample(self, images, title):
@@ -158,6 +173,7 @@ class CNN:
         return np.array(labels)
 
     def evaluate_and_plot(self, test_data):
+        print("Evaluating on testing set...")
         y_true, y_pred = [], []
 
         for image, label in test_data:
@@ -175,7 +191,9 @@ class CNN:
         self.plot_samples(test_data)
 
     def predict(self, input_data):
-        predictions = self.model.predict(input_data, batch_size=conf.BATCH_SIZE)
+
+        predictions = self.model.predict(input_data, batch_size=conf.BATCH_SIZE, verbose=None)
+
         return predictions
 
     def summary(self):

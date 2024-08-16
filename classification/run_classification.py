@@ -3,7 +3,9 @@ import os
 
 import config as conf
 import dataset_loader as dataset_loader
+
 from model import cnn as cnn
+from model import resnet as resnet
 
 
 if __name__ == '__main__':
@@ -27,13 +29,18 @@ if __name__ == '__main__':
 
     if conf.MODEL == "CNN":
         clf = cnn.CNN(num_classes = num_classes)
+    elif conf.MODEL == "ResNet":
+        clf = resnet.ResNet(num_classes = num_classes)
     else:
         print("Models unrecognized!: {}".format(conf.MODEL))
     print("Use Model: {}".format(conf.MODEL))
 
     # train the model
-    clf.train(train_dataset)
-    print("Finish training!")
+    if conf.LOAD_SAVED_MODEL:
+        clf.load_model()
+    else:
+        clf.train(train_dataset)
+        print("Finish training!")
 
     # evaluate the model
     clf.evaluate_and_plot(test_dataset)

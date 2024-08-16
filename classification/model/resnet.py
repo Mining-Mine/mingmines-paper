@@ -2,7 +2,7 @@ import os
 
 import tensorflow as tf
 from tensorflow.keras import layers, models
-from tensorflow.keras.applications import ResNet50
+from tensorflow.keras.applications import ResNet101
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -10,14 +10,16 @@ import numpy as np
 
 import config as conf
 
-class ResNet50:
+tf.random.set_seed(42)
+
+class ResNet:
     def __init__(self, num_classes):
         self.num_classes = num_classes
         self.model = self._build_model()
         print("ResNet50 finish initialization")
 
     def _build_model(self):
-        base_model = ResNet50(weights='imagenet', include_top=False, input_shape=conf.INPUT_SHAPE)
+        base_model = ResNet101(weights='imagenet', include_top=False, input_shape=conf.INPUT_SHAPE)
 
         # frozon the resnet50 layers
         base_model.trainable = False
@@ -26,13 +28,12 @@ class ResNet50:
         model.add(base_model)
 
         # Data augmentation layer
-        model.add(layers.experimental.preprocessing.RandomFlip("horizontal"))
-        model.add(layers.experimental.preprocessing.RandomRotation(0.1))
-        model.add(layers.experimental.preprocessing.RandomZoom(0.1))
+        model.add(layers.RandomFlip("horizontal"))
+        model.add(layers.RandomRotation(0.1))
+        model.add(layers.RandomZoom(0.1))
 
         # Global Average Pooling layer (instead of Flatten layer)
         model.add(layers.GlobalAveragePooling2D())
-        model.add(layers.Dropout(0.5))
 
         # Fully connected layer
         model.add(layers.Dense(64, activation='relu'))
@@ -54,6 +55,14 @@ class ResNet50:
 
         return model
 
+    def load_model(self):
+        try:
+            self.model.load_weights("./result/resnet/resnet.weights.h5")
+            print("loaded model: ./result/resnet/resnet.weights.h5")
+        except:
+            print("Error loading model: ./result/resnet/resnet.weights.h5")
+            exit()
+
     def train(self, train_data, validation_data=None, batch_size=conf.BATCH_SIZE):
         history = self.model.fit(
             train_data,
@@ -61,12 +70,19 @@ class ResNet50:
             epochs=conf.TRAIN_EPOCH,
             batch_size=batch_size
         )
+
+        # save the training history
+        with open("./result/resnet/resnet_history.pkl", "wb") as file:
+            pickle.dump(history.history, file)
+
+        # save the resulting model
+        self.model.save_weights("./result/resnet/resnet.weights.h5")
+
         return history
 
     def evaluate_model(self, y_true, y_pred):
         # Calculate the confusion matrix
         cm = confusion_matrix(y_true, np.round(y_pred))
-        print("Confusion matrix shape:", cm.shape)
         TP, FP, FN, TN = cm.ravel()
 
         # Calculate various metrics
@@ -94,70 +110,82 @@ class ResNet50:
         plt.title("Confusion Matrix")
         plt.xlabel("Predicted")
         plt.ylabel("Actual")
-        plt.savefig("./CNN_confusion_matrix")
+        plt.savefig("./result/resnet/ResNet_confusion_matrix")
 
-    def plot_samples(self, test_data, y_true, y_pred):
+    def plot_samples(self, test_data):
         TP_images = []
         TN_images = []
         FP_images = []
         FN_images = []
 
+        full = 0
         # Classify the images based on the predictions
-        for i in range(len(y_true)):
-            if y_true[i] == 1 and y_pred[i] == 1:
-                TP_images.append(test_data[i][0])  # Append TP images
-            elif y_true[i] == 0 and y_pred[i] == 0:
-                TN_images.append(test_data[i][0])  # Append TN images
-            elif y_true[i] == 0 and y_pred[i] == 1:
-                FP_images.append(test_data[i][0])  # Append FP images
-            elif y_true[i] == 1 and y_pred[i] == 0:
-                FN_images.append(test_data[i][0])  # Append FN images
+        for i, (image, label) in enumerate(test_data):
+            prediction = np.round(self.predict(image).flatten())
+
+            if label == 1 and prediction == 1:
+                if len(TP_images) < 9:
+                    TP_images.append(image)  # Append TP images
+                    if len(TP_images) >= 9:
+                        full += 1
+            elif label == 0 and prediction == 0:
+                if len(TN_images) < 9:
+                    TN_images.append(image)  # Append TN images
+                    if len(TN_images) >= 9:
+                        full += 1
+            elif label == 0 and prediction == 1:
+                if len(FP_images) < 9:
+                    FP_images.append(image)  # Append FP images
+                    if len(FP_images) >= 9:
+                        full += 1
+            elif label == 1 and prediction == 0:
+                if len(FN_images) < 9:
+                    FN_images.append(image)  # Append FN images
+                    if len(FN_images) >= 9:
+                        full += 1
+            if full >= 4:
+                break
 
         # Plot a random sample from each category
-        self.plot_image_sample(TP_images, "TP_samples")
-        self.plot_image_sample(TN_images, "TN_samples")
-        self.plot_image_sample(FP_images, "FP_samples")
-        self.plot_image_sample(FN_images, "FN_samples")
+        self.plot_image_sample(TP_images, "./result/resnet/TP_samples")
+        self.plot_image_sample(TN_images, "./result/resnet/TN_samples")
+        self.plot_image_sample(FP_images, "./result/resnet/FP_samples")
+        self.plot_image_sample(FN_images, "./result/resnet/FN_samples")
+
 
     def plot_image_sample(self, images, title):
         plt.figure(figsize=(10, 10))
         for i in range(min(9, len(images))):  # Show up to 9 images
             plt.subplot(3, 3, i + 1)
-            plt.imshow(images[i])
+            plt.imshow(images[i][0])
             plt.axis('off')
         plt.suptitle(title)
         plt.savefig(title)
         print("plot samples: {}".format(title))
 
-    def extract_images_and_labels(self, dataset):
-        images = []
-        labels = []
-        for image, label in dataset:
-            images.append(image.numpy())
-            labels.append(label.numpy())
-        return np.array(images), np.array(labels)
+    def extract_labels(self, dataset):
+        labels = [label.numpy() for _, label in dataset]
+        return np.array(labels)
 
     def evaluate_and_plot(self, test_data):
-        images, y_true = self.extract_images_and_labels(test_data)
-        y_pred = self.predict(test_data)
+        y_true, y_pred = [], []
 
-        print("num of classes = {}".format(self.num_classes))
-        if self.num_classes == 2:
-            y_pred = np.round(y_pred).flatten()  # Round off for binary classification
+        for image, label in test_data:
+            y_true.append(label.numpy())
+            y_pred.append(self.predict(image).flatten())
 
-        # Evaluate the model and print results
+        y_true = np.array(y_true)
+        y_pred = np.round(np.array(y_pred))
+
         print("Unique values in y_true:", np.unique(y_true))
         print("Unique values in y_pred:", np.unique(y_pred))
+        
         cm = self.evaluate_model(y_true, y_pred)
-
-        # Plot the confusion matrix
         self.plot_confusion_matrix(cm)
-
-        # Plot sample images for TP, TN, FP, FN
-        self.plot_samples(images, y_true, y_pred)
+        self.plot_samples(test_data)
 
     def predict(self, input_data):
-        predictions = self.model.predict(input_data, batch_size=conf.BATCH_SIZE)
+        predictions = self.model.predict(input_data, batch_size=conf.BATCH_SIZE, verbose=None)
         return predictions
 
     def summary(self):

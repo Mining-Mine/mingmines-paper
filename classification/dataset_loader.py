@@ -47,7 +47,7 @@ def load_dataset():
     not_mine_dataset_n_samples = len(not_mine_files)
 
     # 3. balance the dataset
-    min_n_sample = min([mine_dataset_n_samples, not_mine_dataset_n_samples])
+    min_n_sample = min([mine_dataset_n_samples, not_mine_dataset_n_samples, conf.MAX_SAMPLES])
     mine_files = random.sample(mine_files, min_n_sample)
     not_mine_files = random.sample(not_mine_files, min_n_sample)
     # label

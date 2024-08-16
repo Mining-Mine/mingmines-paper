@@ -12,6 +12,8 @@ import config as conf
 from tensorflow.keras.applications import vit
 from tensorflow.keras import layers, models
 
+tf.random.set_seed(42)
+
 class ViT:
     def __init__(self, num_classes):
         self.num_classes = num_classes

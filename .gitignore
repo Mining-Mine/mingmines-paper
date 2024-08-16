@@ -11,3 +11,5 @@ image_dataset/labeled_mine_dataset/*
 
 classification/__pycache__
 classification/model/__pycache__
+classification/result/cnn/*.h5
+classification/result/cnn/*.pkl
