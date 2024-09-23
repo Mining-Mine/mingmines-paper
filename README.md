@@ -30,6 +30,7 @@ For the model to be effective in real-world applications, it must be capable of 
 
 ![image](https://github.com/macs30123-s24/final-project-mining-mines/assets/143442308/e7e8e5d0-5f6b-4d44-a078-b29fca80b071)
 
+
 ## Architecture diagram
 
 ![Architecture Diagram](https://github.com/macs30123-s24/final-project-mining-mines/blob/main/architecture.png)
