@@ -78,16 +78,10 @@ After buliding EMR cluster, we use two sample datasets (radius 1km vs 5km) and  
 - Step 2: Data Transformations and Feature Engineering 
 - Step 3: Develop Pipelines and Employee Machine Learnig Models to Predict.
 
-Below are confusion matrix of above  machine learning models:
-
-![confusion matrix_1km](https://github.com/macs30123-s24/final-project-mining-mines/blob/b77f04ffa2557fd420f8a54a201289c1de774b62/41716684776_.pic.jpg)
-
-![confusion matrix_5km](https://github.com/macs30123-s24/final-project-mining-mines/blob/b77f04ffa2557fd420f8a54a201289c1de774b62/51716684777_.pic.jpg)
-
   
 ## 3. Conclusion
 
-### Sample Data Using Radius 1km as Cutoff
+### Model Performance
 
 ![confusion matrix](https://github.com/Mining-Mine/mingmines-paper/blob/main/machine_learning_result.png)
 ![confusion matrix](https://github.com/Mining-Mine/mingmines-paper/blob/main/machine_learning_result2.png)
