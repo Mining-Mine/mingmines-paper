@@ -29,11 +29,8 @@ For the model to be effective in real-world applications, it must be capable of 
 - **Machine Learning**: Create an Amazon EMR cluster to perform data cleaning, processing, model training, and visualization using AWS PySpark sessions.
 
 ![image](https://github.com/Mining-Mine/mingmines-paper/blob/main/workflow_diagram.png)
+![image](https://github.com/Mining-Mine/mingmines-paper/blob/main/workflow_diagram2.png)
 
-
-## Architecture diagram
-
-![Architecture Diagram](https://github.com/macs30123-s24/final-project-mining-mines/blob/main/architecture.png)
 
 ## 1. Data Collection and Preprocessing
 
