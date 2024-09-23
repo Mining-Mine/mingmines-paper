@@ -28,7 +28,7 @@ For the model to be effective in real-world applications, it must be capable of 
 - **Data Processing**: Process and append the feature data acquired from sources other than landsat dataset using the Midway cluster (append few feature to orginal dataset). MPI (Message Passing Interface) is used for parallel processing of mining location data to efficiently calculate distances to various geographic features.
 - **Machine Learning**: Create an Amazon EMR cluster to perform data cleaning, processing, model training, and visualization using AWS PySpark sessions.
 
-![image](https://github.com/macs30123-s24/final-project-mining-mines/assets/143442308/e7e8e5d0-5f6b-4d44-a078-b29fca80b071)
+![image](https://github.com/Mining-Mine/mingmines-paper/blob/main/workflow_diagram.png)
 
 
 ## Architecture diagram
