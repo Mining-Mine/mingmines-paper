@@ -125,7 +125,7 @@ The analysis considers five key geographic features: waterways, protected areas,
 1. **Waterways and Specific Point**
    ![image](https://github.com/Mining-Mine/mingmines-paper/blob/main/visualization.png)
 
-   - **Description**: This map shows the distribution of waterways (in blue) in the Ghana, with a specific point highlighted in red. It helps in analyzing the proximity of mining locations to water sources.
+   - **Description**: This map shows the distribution of roads, waterways (in blue) and protected area in the Ghana. It helps in analyzing the proximity of mining locations to water sources.
 
 
 ## Team Roles 
