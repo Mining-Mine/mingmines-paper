@@ -89,22 +89,8 @@ Below are confusion matrix of above  machine learning models:
 
 ### Sample Data Using Radius 1km as Cutoff
 
-| Model               | Logit Model           | Random Forest        | Neural Network        |
-|---------------------|-----------------------|-----------------------|-----------------------|
-| **Test Accuracy**   | 0.817176979           | 0.873840681           | 0.823840681           |
-| **True Positive Rate** | 0.802498048        | 0.837837838           | 0.756192661           |
-| **True Negative Rate** | 0.831181728        | 0.91541199            | 0.844488875           |
-
-
-### Sample Data Using Radius 5km as Cutoff
-
-| Model               | Logit Model           | Random Forests        | Neural Network        |
-|---------------------|-----------------------|-----------------------|-----------------------|
-| **Test Accuracy**   | 0.773996431           | 0.833940681           | 0.783840681           |
-| **True Positive Rate** | 0.796872528        | 0.7663320331649509    | 0.747660243           |
-| **True Negative Rate** | 0.752295184        | 0.9364751452550032    | 0.873700306           |
-
-
+![confusion matrix](https://github.com/Mining-Mine/mingmines-paper/blob/main/machine_learning_result.png)
+![confusion matrix](https://github.com/Mining-Mine/mingmines-paper/blob/main/machine_learning_result2.png)
 - **Best Performing Model**: The Random Forests model outperforms the Logit Model and Neural Network in both accuracy and the ability to correctly identify mining and non-mining activities (highest true positive and true negative rates). This makes it the most reliable model for detecting potential mining activities.
 - **Impact of Radius Cutoff**: Increasing the radius cutoff from 1km to 5km generally decreases the performance of the Logit Model and Neural Network, while the Random Forests model maintains consistent performance. This suggests that the Random Forests model is more robust to changes in spatial scale.
 - **Model Recommendations**: For applications requiring high accuracy and reliability in detecting mining activities, the Random Forests model is recommended. The Logit Model, while simpler, performs adequately but not as well as the Random Forests model. The Neural Network shows potential but may require further tuning to handle larger spatial scales effectively.
