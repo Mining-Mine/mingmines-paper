@@ -1,4 +1,4 @@
-# Mining Mines: A Case Study on Detecting Mining Activities in Eastern Congo Using Satellite Imagery and Scalable Computing Methods
+# Mining Mines: A Case Study on Detecting Mining Activities in Ghana Using Satellite Imagery and Scalable Computing Methods
 
 ## Introduction
 
