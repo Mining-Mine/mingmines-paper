@@ -83,11 +83,9 @@ After buliding EMR cluster, we use two sample datasets (radius 1km vs 5km) and  
 
 ![confusion matrix](https://github.com/Mining-Mine/mingmines-paper/blob/main/machine_learning_result.png)
 ![confusion matrix](https://github.com/Mining-Mine/mingmines-paper/blob/main/machine_learning_result2.png)
-- **Best Performing Model**: The Random Forests model outperforms the Logit Model and Neural Network in both accuracy and the ability to correctly identify mining and non-mining activities (highest true positive and true negative rates). This makes it the most reliable model for detecting potential mining activities.
-- **Impact of Radius Cutoff**: Increasing the radius cutoff from 1km to 5km generally decreases the performance of the Logit Model and Neural Network, while the Random Forests model maintains consistent performance. This suggests that the Random Forests model is more robust to changes in spatial scale.
-- **Model Recommendations**: For applications requiring high accuracy and reliability in detecting mining activities, the Random Forests model is recommended. The Logit Model, while simpler, performs adequately but not as well as the Random Forests model. The Neural Network shows potential but may require further tuning to handle larger spatial scales effectively.
 
-In summary, for both radius cutoffs, the Random Forests model demonstrates superior performance, making it the preferred choice for detecting potential mining activities in the given dataset.
+
+In summary, the Random Forests model demonstrates superior performance, making it the preferred choice for detecting potential mining activities in the given dataset.
 
 
 
@@ -101,12 +99,5 @@ The analysis considers five key geographic features: waterways, protected areas,
    ![image](https://github.com/Mining-Mine/mingmines-paper/blob/main/visualization.png)
 
    - **Description**: This map shows the distribution of roads, waterways (in blue) and protected area in the Ghana. It helps in analyzing the proximity of mining locations to water sources.
-
-
-
-## Reference
-
-[1] Hilson, G. (2021). The large footprint of small-scale artisanal gold mining in Ghana. Science of The Total Environment, 778, 146331. https://doi.org/10.1016/j.scitotenv.2021.146331
-
 
 
