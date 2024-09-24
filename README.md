@@ -106,13 +106,6 @@ The analysis considers five key geographic features: waterways, protected areas,
    - **Description**: This map shows the distribution of roads, waterways (in blue) and protected area in the Ghana. It helps in analyzing the proximity of mining locations to water sources.
 
 
-## Team Roles 
-
-**Yu Hui**: Processing landsat data as well as related feature using AWS 
-
-**Kevin**:  Data pre-processinng and gnenerate related features.
-
-**Charlotte**: Responsible mainly for training the machine learning model, analyze the performance, and conducting respective visualization.
 
 ## Reference
 
