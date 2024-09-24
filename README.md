@@ -95,9 +95,6 @@ In summary, for both radius cutoffs, the Random Forests model demonstrates super
 
 The analysis considers five key geographic features: waterways, protected areas, main roads, local roads, and village distributions. The following visualizations represent these features:
 
-- the code to generate descirptive visualization:
-- **Congo Visualization**: [Congo-visualization.ipynb](https://github.com/macs30123-s24/final-project-mining-mines/blob/main/Data-preprocessing/Notebooks/Congo-visualization.ipynb).
-
 ### Example Visualizations
 
 1. **Waterways and Specific Point**
