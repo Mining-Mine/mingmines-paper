@@ -69,7 +69,7 @@ We need to label artisanal mines with ndvi loss greater than 0.15 [1] retrived f
 The results of features and label of each location of east congo are saved to a new CSV file to s3 bucket(bucketname = "africamining"), which includes the potential mining indicator for each NDVI loss point.
 
 ## 2. Machine Learning
-[machine learning and pipeline code](https://github.com/macs30123-s24/final-project-mining-mines/blob/main/ml_pipelines.ipynb)
+[machine learning and pipeline code](ml_2(0814).ipynb)
 
 After buliding EMR cluster, we use two sample datasets (radius 1km vs 5km) and  logit model, random forest, and neutral network models to train and predict data on Spark Session. We have three main steps: 
 - Step 1: Data Processing and Visualization
