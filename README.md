@@ -1,7 +1,8 @@
 # Mining Mines: A Case Study on Detecting Mining Activities in Ghana Using Satellite Imagery and Scalable Computing Methods
 
 Code Contributor:  
-1. Peiran Qin  
+1. Peiran Qin
+2. Yu Hui
 
 ## Introduction
 
