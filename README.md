@@ -28,8 +28,8 @@ For the model to be effective in real-world applications, it must be capable of 
 - **Data Processing**: Process and append the feature data acquired from sources other than landsat dataset using the Midway cluster (append few feature to orginal dataset). MPI (Message Passing Interface) is used for parallel processing of mining location data to efficiently calculate distances to various geographic features.
 - **Machine Learning**: Create an Amazon EMR cluster to perform data cleaning, processing, model training, and visualization using AWS PySpark sessions.
 
-![image](https://github.com/Mining-Mine/mingmines-paper/blob/main/workflow_diagram.png)
-![image](https://github.com/Mining-Mine/mingmines-paper/blob/main/workflow_diagram2.png)
+![image](https://github.com/Mining-Mine/mingmines-paper/blob/main/pics/workflow_diagram.png)
+![image](https://github.com/Mining-Mine/mingmines-paper/blob/main/pics/workflow_diagram2.png)
 
 
 ## 1. Data Collection and Preprocessing
@@ -81,8 +81,8 @@ After buliding EMR cluster, we use two sample datasets (radius 1km vs 5km) and  
 
 ### Model Performance
 
-![confusion matrix](https://github.com/Mining-Mine/mingmines-paper/blob/main/machine_learning_result.png)
-![confusion matrix](https://github.com/Mining-Mine/mingmines-paper/blob/main/machine_learning_result2.png)
+![confusion matrix](https://github.com/Mining-Mine/mingmines-paper/blob/main/pics/machine_learning_result.png)
+![confusion matrix](https://github.com/Mining-Mine/mingmines-paper/blob/main/pics/machine_learning_result2.png)
 
 
 In summary, the Random Forests model demonstrates superior performance, making it the preferred choice for detecting potential mining activities in the given dataset.
@@ -96,7 +96,7 @@ The analysis considers five key geographic features: waterways, protected areas,
 ### Example Visualizations
 
 1. **Waterways and Specific Point**
-   ![image](https://github.com/Mining-Mine/mingmines-paper/blob/main/visualization.png)
+   ![image](https://github.com/Mining-Mine/mingmines-paper/blob/main/pics/visualization.png)
 
    - **Description**: This map shows the distribution of roads, waterways (in blue) and protected area in the Ghana. It helps in analyzing the proximity of mining locations to water sources.
 
