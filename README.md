@@ -1,5 +1,8 @@
 # Mining Mines: A Case Study on Detecting Mining Activities in Ghana Using Satellite Imagery and Scalable Computing Methods
 
+Code Contributor:  
+1. Peiran Qin  
+
 ## Introduction
 
 The Ghana is a region rich in minerals such as gold, tantalum, and tin, which are vital for various industries worldwide. However, the artisanal mining activities in this area are often unregulated, leading to significant environmental degradation and severe social issues, including human rights abuses and armed conflicts. Monitoring and regulating these activities is crucial for mitigating their negative impacts. Traditional methods of monitoring, such as on-ground inspections, are often impractical due to the region's remote and conflict-prone nature. Therefore, leveraging advanced technologies like satellite imagery and scalable computing methods offers a promising solution to this challenge.
