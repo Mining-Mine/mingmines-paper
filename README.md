@@ -3,6 +3,7 @@
 Code Contributor:  
 1. Peiran Qin
 2. Yu Hui
+3. Jiale Zhou
 
 ## Introduction
 
